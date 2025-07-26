@@ -1,0 +1,67 @@
+{
+    "prompts": [
+        {
+            "command": "make it modern",
+            "changes": {
+                "buttonWidth": 250,
+                "buttonHeight": 48,
+                "buttonColor": "#2196F3",
+                "containerColor": "#F5F5F5",
+                "textfield1": "Username",
+                "textfield2": "Password"
+            }
+        },
+        {
+            "command": "make it compact",
+            "changes": {
+                "buttonWidth": 120,
+                "buttonHeight": 32,
+                "buttonColor": "#9E9E9E",
+                "containerColor": "#FFFFFF",
+                "textfield1": "ID",
+                "textfield2": "PIN"
+            }
+        },
+        {
+            "command": "make it playful",
+            "changes": {
+                "buttonWidth": 200,
+                "buttonHeight": 56,
+                "buttonColor": "#FF4081",
+                "containerColor": "#E1F5FE",
+                "textfield1": "What's your nickname?",
+                "textfield2": "Tell us your superpower!"
+            }
+        },
+        {
+            "command": "make it professional",
+            "changes": {
+                "buttonWidth": 180,
+                "buttonHeight": 44,
+                "buttonColor": "#1976D2",
+                "containerColor": "#FAFAFA",
+                "textfield1": "Full Name",
+                "textfield2": "Business Email"
+            }
+        },
+        {
+            "command": "make it minimal",
+            "changes": {
+                "buttonWidth": 150,
+                "buttonHeight": 40,
+                "buttonColor": "#212121",
+                "containerColor": "#FFFFFF",
+                "textfield1": "Name",
+                "textfield2": "Email"
+            }
+        }
+    ],
+    "instructions": "Type any of these commands in the text field to change the layout:",
+    "examples": [
+        "make it modern - Creates a modern, material design-inspired layout",
+        "make it compact - Reduces sizes for a more condensed view",
+        "make it playful - Uses fun colors and friendly text",
+        "make it professional - Business-appropriate styling",
+        "make it minimal - Clean, minimalistic design"
+    ]
+}
