@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:llmtodisplay/constants/app_sizes.dart';
 import 'package:llmtodisplay/core/presentation/widgets/custom_text_field.dart';
+import 'package:llmtodisplay/core/services/llm_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -36,49 +37,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _handlePrompt() {
-    if (_prompts == null) return;
+  final _llmService = LLMService();
 
-    final prompt = _promptTextController.text.toLowerCase();
-    final promptsList = _prompts!['prompts'] as List;
+  Future<void> _handlePrompt() async {
+    final prompt = _promptTextController.text;
+    if (prompt.isEmpty) return;
 
-    for (final promptData in promptsList) {
-      if (prompt == promptData['command']) {
-        final changes = promptData['changes'];
-        // First fade out
-        setState(() {
-          _contentOpacity = 0.0;
-        });
+    // First fade out
+    setState(() {
+      _contentOpacity = 0.0;
+    });
 
-        // Wait for fade out animation
-        Future.delayed(const Duration(milliseconds: 300), () {
-          setState(() {
-            // Update button dimensions
-            _buttonWidth = double.parse(changes['buttonWidth'].toString());
-            _buttonHeight = double.parse(changes['buttonHeight'].toString());
+    // Get layout changes from LLM
+    final layoutChange = await _llmService.interpretLayoutChanges(prompt);
 
-            // Update colors
-            _buttonColor = Color(
-              int.parse(changes['buttonColor'].replaceAll('#', '0xFF')),
-            );
-            _containerColor = Color(
-              int.parse(changes['containerColor'].replaceAll('#', '0xFF')),
-            );
+    if (layoutChange != null) {
+      // Wait for fade out animation
+      await Future.delayed(const Duration(milliseconds: 300));
 
-            // Update text fields
-            _hintText1 = changes['textfield1'];
-            _hintText2 = changes['textfield2'];
-          });
+      setState(() {
+        // Update button dimensions if provided
+        if (layoutChange.buttonWidth != null) {
+          _buttonWidth = layoutChange.buttonWidth!;
+        }
+        if (layoutChange.buttonHeight != null) {
+          _buttonHeight = layoutChange.buttonHeight!;
+        }
 
-          // Fade back in
-          Future.delayed(const Duration(milliseconds: 100), () {
-            setState(() {
-              _contentOpacity = 1.0;
-            });
-          });
-        });
-        break;
-      }
+        // Update colors if provided
+        if (layoutChange.buttonColor != null) {
+          _buttonColor = Color(
+            int.parse(layoutChange.buttonColor!.replaceAll('#', '0xFF')),
+          );
+        }
+        if (layoutChange.containerColor != null) {
+          _containerColor = Color(
+            int.parse(layoutChange.containerColor!.replaceAll('#', '0xFF')),
+          );
+        }
+
+        // Update text fields if provided
+        if (layoutChange.textfield1 != null) {
+          _hintText1 = layoutChange.textfield1!;
+        }
+        if (layoutChange.textfield2 != null) {
+          _hintText2 = layoutChange.textfield2!;
+        }
+      });
+
+      // Fade back in
+      await Future.delayed(const Duration(milliseconds: 100));
+      setState(() {
+        _contentOpacity = 1.0;
+      });
+    } else {
+      // If no changes, just fade back in
+      setState(() {
+        _contentOpacity = 1.0;
+      });
     }
 
     // Clear the prompt field after applying changes
@@ -154,7 +170,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 width: 200, // Fixed width for the button
                 child: ElevatedButton(
-                  onPressed: _handlePrompt,
+                  onPressed: () => _handlePrompt(),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
