@@ -74,7 +74,6 @@ Examples:
   }
 
   String? _mockLLMResponse(String prompt) {
-    // This is a simple mock to demonstrate the concept
     final normalizedPrompt = prompt.toLowerCase();
 
     if (normalizedPrompt.contains('bigger')) {

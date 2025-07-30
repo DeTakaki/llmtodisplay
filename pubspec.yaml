@@ -35,6 +35,7 @@ dependencies:
 
   #State management
   flutter_bloc: ^9.1.1  
+  equatable: ^2.0.7
 
   #Navigation
   go_router: ^16.0.0

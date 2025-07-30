@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'constants/app_router.dart';
 
+final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() {
   runApp(const MyApp());
 }
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       routerConfig: router,
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
     );
   }
 }
